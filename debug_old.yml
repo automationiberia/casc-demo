@@ -1,0 +1,8 @@
+- name: debug
+  connection: local
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+      - debug:
+          msg: "debug old"
