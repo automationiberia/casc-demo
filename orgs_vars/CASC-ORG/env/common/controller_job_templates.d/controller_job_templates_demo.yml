@@ -1,0 +1,19 @@
+---
+controller_templates:
+  - name: "{{ orgs }} Old_JT_community_day"
+    description: "Playbook to test CD of CasC"
+    organization: "{{ orgs }}"
+    project: "{{ orgs }} CasC_Data"
+    inventory: "{{ orgs }} Localhost"
+    playbook: "debug_old.yml"
+    job_type: run
+
+  #- name: "{{ orgs }} New_JT_CasC_community_day"
+  #  description: "Playbook to test CD of CasC"
+  #  organization: "{{ orgs }}"
+  #  project: "{{ orgs }} CasC_Data"
+  #  inventory: "{{ orgs }} Localhost"
+  #  playbook: "debug_new.yml"
+  #  job_type: run
+
+...

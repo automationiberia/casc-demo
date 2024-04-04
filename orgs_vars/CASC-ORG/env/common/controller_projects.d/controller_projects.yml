@@ -1,0 +1,15 @@
+---
+controller_projects:
+  - name: "{{ orgs }} CasC_Data"
+    description: "Project to include Casc_Data"
+    organization: "{{ orgs }}"
+    scm_type: git
+    scm_credential: "{{ orgs }} {{ env }} Gitlab Credential"      
+    scm_url: "git@10.0.0.251:ansibleday-berlin/casc-org.git"
+    scm_branch: "{{ casc_gitlab_scm_branch | default(env) }}"
+    scm_clean: false
+    scm_delete_on_update: false
+    scm_update_on_launch: true
+    scm_update_cache_timeout: 86400
+    allow_override: true
+...
