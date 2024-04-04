@@ -1,11 +1,11 @@
-# superadmin
+# CASC-DEMO
 
 
 ## Description
 
 This repository give us a place to maintain a control versions of the every object in an Ansible Automation Controller.
 
-CasC (Configuration as Code)  means the posibility of define every object of Ansible Automation Controller as code in a git repository. In this lab, we have defined two environments (dev and pro) to do the CasC and interact with a gitops approach between them.
+CasC (Configuration as Code)  means the possibility of define every object of Ansible Automation Controller as code in a git repository. In this lab, we have defined two environments (dev and pro) to do the CasC and interact with a gitops approach between them.
 
 ## Steps to test the CasC approach
 ### Day-Zero from CLI
@@ -16,16 +16,18 @@ CasC (Configuration as Code)  means the posibility of define every object of Ans
     - name: ansible.utils
     - name: ansible.posix
     - name: community.general
-    - name: redhat_cop.controller_configuration
+    - name: infra.controller_configuration
     - name: automationiberia.casc_setup
 
 Before using CasC as a GitOps approach, it is needed to launch an initialization from CLI which it is called Day-Zero.
 
+   > **_NOTE:_**  Copy this repo to your own gitlab organization and play with it instead of the example we use during following steps.
+
 1. Clone the repository and create a new day-zero branch
 
    ```
-   git clone git@gitlab.adonislab.com:casc/superadmin.git
-   cd superadmin/
+   git clone git@gitlab.com:casc/CASC-ORG.git
+   cd CASC-ORG
    git checkout -b casc-dev-day0
    ```
 
@@ -40,19 +42,19 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
 3. Edit credentials for day zero
 
    ```
-   vi orgs_vars/superadmin/env/dev/controller_credentials.d/controller_credentials.yml
-   vi orgs_vars/superadmin/env/pro/controller_credentials.d/controller_credentials.yml
-   ansible-vault encrypt orgs_vars/superadmin/env/pro/controller_credentials.d/* orgs_vars/superadmin/env/dev/controller_credentials.d/*
+   vi orgs_vars/CASC-ORG/env/dev/controller_credentials.d/controller_credentials.yml
+   vi orgs_vars/CASC-ORG/env/pro/controller_credentials.d/controller_credentials.yml
+   ansible-vault encrypt orgs_vars/CASC-ORG/env/pro/controller_credentials.d/* orgs_vars/CASC-ORG/env/dev/controller_credentials.d/*
    ```
 
 4. Check the inventory file. Example:
 
    ```
    [dev]
-   controller.adonislab.com
+   controller.domain.com
 
    [pro]
-   controller.adonislab.com
+   controller.domain.com
    ```
 
 5. Setting vault credential file
@@ -65,8 +67,8 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
 6. Launch ansible-navigator from CLI to setup day-zero of CasC. Example:
 
    ```
-   ansible-navigator run casc_ctrl_config.yml -i inventory -l dev -e '{orgs: superadmin, dir_orgs_vars: orgs_vars, env: dev}' -m stdout --eei quay.io/automationiberia/aap/ee-casc --vault-password-file .vault_password
-   ansible-navigator run casc_ctrl_config.yml -i inventory -l pro -e '{orgs: superadmin, dir_orgs_vars: orgs_vars, env: pro}' -m stdout --eei quay.io/automationiberia/aap/ee-casc --vault-password-file .vault_password
+   ansible-navigator run casc_ctrl_config.yml -i inventory -l dev -e '{orgs: CASC-ORG, dir_orgs_vars: orgs_vars, env: dev}' -m stdout --eei quay.io/automationiberia/aap/ee-casc --vault-password-file .vault_password
+   ansible-navigator run casc_ctrl_config.yml -i inventory -l pro -e '{orgs: CASC-ORG, dir_orgs_vars: orgs_vars, env: pro}' -m stdout --eei quay.io/automationiberia/aap/ee-casc --vault-password-file .vault_password
    ```
 
 7. Push the changes
@@ -104,18 +106,9 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
 
 10. Configure the webhooks for both environments: DEV and PRO.
 
-    > **_NOTE:_** You can use the playbook gitlab_webhook.yml or do it manually if you prefer how it is done:
-
-    AUTOMATICALLY WITH A PLAYBOOK (it is needed to change <user> and <token> in the command. Also it can be used gitlab_api_password instead of gitlab_api_token in case it is used a password.):
-
-    ```
-    ansible-navigator run gitlab_webhook.yml -i inventory -l dev -e '{gitlab_action_push: true, gitlab_action_tag: false, gitlab_branch_filter: dev, gitlab_api_user: <user>, gitlab_api_token: <token>}' -m stdout --eei quay.io/automationiberia/aap/ee-casc --vault-password-file .vault_password
-    ansible-navigator run gitlab_webhook.yml -i inventory -l pro -e '{gitlab_action_push: false, gitlab_action_tag: true, gitlab_api_user: <user>, gitlab_api_token: <token>}' -m stdout --eei quay.io/automationiberia/aap/ee-casc --vault-password-file .vault_password
-    ```
-
     MANUALLY IN DEV (only if you didn't by the playbook):
 
-    1. Go to Dev Controller and open superadmin CasC_AAP_Workflow
+    1. Go to Dev Controller and open CASC-ORG CasC_AAP_Workflow
     2. Copy the content of "Webhook URL" and "Webhook Key"
     3. Go to Gitlab -> Settings -> Webhooks
     4. Paste the content of "Webhook URL" and "Webhook Key" in the gaps "URL" and "Secret Content"
@@ -125,7 +118,7 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
 
     MANUALLY IN PRO (only if you didn't by the playbook):
 
-    1. Go to PRO Controller and open superadmin CasC_AAP_Workflow
+    1. Go to PRO Controller and open CASC-ORG CasC_AAP_Workflow
     2. Copy the content of "Webhook URL" and "Webhook Key"
     3. Go to Gitlab -> Settings -> Webhooks
     4. Paste the content of "Webhook URL" and "Webhook Key" in the gaps "URL" and "Secret Content"
@@ -138,9 +131,9 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
 1. Clone the given repository:
 
    ```
-   git clone git@gitlab.adonislab.com:casc/superadmin.git
+   git clone git@gitlab.com:casc/CASC-ORG.git
 
-   cd superadmin/
+   cd CASC-ORG/
    ```
 
 2. Create a new branch from `dev` to introduce the new items:
@@ -187,9 +180,9 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
    EOF
    ```
 
-   File: `orgs_vars/superadmin/env/common/controller_job_templates.d/new_job_template.yaml`
+   File: `orgs_vars/CASC-ORG/env/common/controller_job_templates.d/new_job_template.yaml`
    ```
-   cat > orgs_vars/superadmin/env/common/controller_job_templates.d/new_job_template.yaml <<EOF
+   cat > orgs_vars/CASC-ORG/env/common/controller_job_templates.d/new_job_template.yaml <<EOF
    ---
    controller_templates:
      - name: "{{ orgs }} New Job Template"
@@ -293,7 +286,7 @@ Before using CasC as a GitOps approach, it is needed to launch an initialization
 
    `playbook: "new_playbook2.yaml"`
 
-   Updated file: `orgs_vars/superadmin/env/common/controller_job_templates.d/new_job_template.yaml`
+   Updated file: `orgs_vars/CASC-ORG/env/common/controller_job_templates.d/new_job_template.yaml`
    ```yaml
    ---
    controller_templates:
